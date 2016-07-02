@@ -13,15 +13,38 @@
         function turnRed(){
             $('h1.aaa').css('color', "blue");
         }
+
+        var url = "http://192.168.2.9";
+        function initialize() {
+            $.support.cors = true;
+
+            $.ajax({url: url + "/api/v1/articles",
+                dataType:"json",
+                type:"GET",
+                success: function(data) {
+                    result = data;
+                    console.log(result);
+                    var list = "";
+                    for(var i=0; i<result.length; i++) {
+                        list += "<li>" + result[i].title + ":" + result[i].content + "</li>";
+                    }
+                    articleElement = document.getElementById("articlelist");
+                    articleElement.innerHTML = list;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Error:" + textStatus);
+                }
+            });
+        }
     </script>
 </head>
 
-<body>
+<body onLoad="initialize()">
 <h1 class="aaa">PhoneGap Sample</h1>
 <form>
     名前：<input id="nameInput" type="text">
-    <div ontouchstart="turnRed()" style="background: #000;width: 100px; height: 100px;"></div>
+    <div onClick="turnRed()" style="background: #000;width: 100px; height: 100px;"></div>
 </form>
-<div id="hello"></div>
+<ul id="articlelist" data-role="listview"></ul>
 </body>
 </html>
